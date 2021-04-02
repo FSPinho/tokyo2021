@@ -1,4 +1,4 @@
-package com.cytechtokyo2021;
+package com.cytech.tokyo2020;
 
 import android.os.Bundle;
 
