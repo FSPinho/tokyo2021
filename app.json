@@ -1,0 +1,12 @@
+{
+  "name": "cytech-tokyo-2021",
+  "displayName": "cytech-tokyo-2021",
+  "expo": {
+    "name": "cytech-tokyo-2021",
+    "slug": "cytech-tokyo-2021",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
