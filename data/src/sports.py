@@ -1,10 +1,11 @@
 import codecs
+import re
 from json import dumps
 
 from bs4 import BeautifulSoup
 
 from src.util.request import get
-from src.util.soup import get_overview_node
+from src.util.soup import get_overview_element, parse_date
 from src.util.text import clear
 from src.util.url import path, domain
 
@@ -26,8 +27,8 @@ def get_sports(languages, url, output):
         for sport_element in sports_elements:
             sport_id = sport_element["href"].replace("/", "")
 
-            title_element = sport_element.select("h2")[0]
-            image_element = sport_element.select("div")[0]
+            title_element = sport_element.select_one("h2")
+            image_element = sport_element.select_one("div")
 
             title = clear(title_element.text)
             print("\t\tFound sport %s - %s" % (sport_id, title))
@@ -41,8 +42,8 @@ def get_sports(languages, url, output):
             print("\t\t\tRetrieving about %s" % about_url)
             about_document = BeautifulSoup(get(about_url), "html.parser")
 
-            about_image_url = about_document.select(".tk-lead-block__picture source")[0]["srcset"].split(", http")[0]
-            about_image_alt = about_document.select(".tk-lead-block__picture img")[0]["alt"]
+            about_image_url = about_document.select_one(".tk-lead-block__picture source")["srcset"].split(", http")[0]
+            about_image_alt = about_document.select_one(".tk-lead-block__picture img")["alt"]
 
             about_has_tabs = len(about_document.select(".tk-article__tabs-list")) > 0
 
@@ -59,17 +60,66 @@ def get_sports(languages, url, output):
                                    prev_url_loc=True)
                     print("\t\t\tRetrieving about tab %s" % tab_url)
                     tab_document = BeautifulSoup(get(tab_url), "html.parser")
-                    about_element = get_overview_node(tab_document, lang).parent
-                    about_element.select("*")[0].string.replace_with(tab_title)
-                    about_texts.append(about_element.prettify())
+                    tab_overview_element = get_overview_element(tab_document, lang)
+
+                    if tab_overview_element:
+                        about_element = tab_overview_element.parent
+                        about_element.select_one("*").string.replace_with(tab_title)
+                        about_texts.append(about_element.prettify())
 
             else:
                 print("\t\t\tRetrieving about article...")
-                about_texts = [get_overview_node(about_document, lang).parent.prettify()]
+                about_texts = [get_overview_element(about_document, lang).parent.prettify()]
+
+            schedule_url = about_document.select_one("li:nth-child(2) a.tk-details-sport__nav-link")["href"]
+            print("\t\t\tRetrieving schedule %s" % schedule_url)
+            schedule_document = BeautifulSoup(get(schedule_url), "html.parser")
+
+            schedule = []
+            schedule_days_elements = schedule_document.select(".tk-article__body .tk-article__part.markdown")
+
+            for schedule_day_element in schedule_days_elements:
+                for p in schedule_day_element.select("div > p"):
+                    if not re.search(r"\d{2}:\d{2}", p.text):
+                        p.decompose()
+
+                hours_elements_count = len(schedule_day_element.select("ul"))
+
+                for hour_index in range(hours_elements_count):
+                    date_index = hour_index * 3 + 1
+                    date_str = schedule_day_element.select_one(
+                        "h4:nth-child(%d), p:nth-child(%d)" % (date_index, date_index)
+                    ).text
+                    date_start, date_end = parse_date(date_str, lang)
+
+                    if not date_start or not date_end:
+                        print(" >>>>>>>>>>> INVALID DATE <<<<<<<<<<<")
+                        print(date_str)
+                        return {}
+
+                    venue_index = hour_index * 3 + 2
+                    venue_str = schedule_day_element.select_one(
+                        "h4:nth-child(%d), p:nth-child(%d)" % (venue_index, venue_index)
+                    ).text
+
+                    events = []
+                    events_index = hour_index * 3 + 3
+                    events_elements = schedule_day_element.select("ul:nth-child(%d) li" % events_index)
+
+                    for event_element in events_elements:
+                        events.append(event_element.text)
+
+                    schedule.append({
+                        "venue": venue_str,
+                        "start": date_start.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                        "end": date_end.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                        "sessions": events
+                    })
 
             sports[lang][sport_id] = {
                 "title": title,
                 "icon": icon,
+                "schedule": schedule,
                 "about": {
                     "texts": about_texts,
                     "image": {
@@ -78,9 +128,8 @@ def get_sports(languages, url, output):
                     }
                 }
             }
-            break
 
     with codecs.open(output, "w", encoding="UTF-8") as output_file:
         output_file.write(dumps(sports, indent=4, ensure_ascii=False))
 
-    return sorted(sports)
+    return sports

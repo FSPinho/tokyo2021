@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from src.util.request import get
 
 
-def get_languages(url, output):
+def get_languages(filter, url, output):
     print("\nRetrieving languages data...", url)
 
     document = BeautifulSoup(get(url), "html.parser")
@@ -16,12 +16,15 @@ def get_languages(url, output):
 
     for lang_element in languages_element:
         lang = lang_element["lang"]
-        languages[lang] = lang
+        if lang in filter:
+            languages[lang] = lang
 
-    for lang in sorted(languages.values()):
+    languages_sorted = sorted(languages.values())
+
+    for lang in languages_sorted:
         print("\tFound language %s" % lang)
 
     with codecs.open(output, "w", encoding="UTF-8") as output_file:
-        output_file.write(dumps(languages, indent=4))
+        output_file.write(dumps(languages_sorted, indent=4))
 
-    return sorted(languages.values())
+    return languages_sorted

@@ -1,10 +1,26 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { DefaultTheme, ThemeProvider } from "./Theme";
+import { RootNavigator } from "./navigation/RootNavigator";
+import { FlipperProvider } from "./utils/FlipperProviderUtil";
+import { StoreProvider } from "./stores";
+import { LocaleProvider } from "./i18n";
+import Splash from "react-native-splash-screen";
+import {StatusBar} from "react-native";
 
 export const App: React.FC = () => {
-  return (
-    <View>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
+    useEffect(() => {
+        Splash.hide();
+    }, []);
+
+    return (
+        <FlipperProvider>
+            <StoreProvider>
+                <LocaleProvider>
+                    <ThemeProvider theme={DefaultTheme}>
+                        <RootNavigator />
+                    </ThemeProvider>
+                </LocaleProvider>
+            </StoreProvider>
+        </FlipperProvider>
+    );
 };

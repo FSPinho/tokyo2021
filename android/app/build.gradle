@@ -3,7 +3,7 @@ apply plugin: "com.android.application"
 import com.android.build.OutputFile
 
 project.ext.react = [
-    enableHermes: false
+    enableHermes: true
 ]
 
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
@@ -64,7 +64,7 @@ android {
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
-                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
             }
 
         }
@@ -73,19 +73,30 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    
+    //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"
+
+    //noinspection GradleDependency
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    
+    //noinspection GradleDependency
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
+    //noinspection GradleDependency
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
         exclude group:'com.squareup.okhttp3', module:'okhttp'
     }
+    //noinspection GradleDependency
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
     addUnimodulesDependencies()
+
+    implementation project(':react-native-splash-screen')
+    implementation project(':lottie-react-native')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
