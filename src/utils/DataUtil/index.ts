@@ -9,7 +9,7 @@ const sports: Sports = sportsData as any;
 const getScheduleByDay = (locale: string): Array<ScheduleDay> => {
     const daysMap = {} as Record<string, ScheduleDay>;
 
-    Object.values(sports[locale]).forEach(({ title, icon, schedule }) => {
+    Object.values(sports[locale]).forEach(({ title, icon, schedule, about }) => {
         schedule.forEach(({ venue, start, end, sessions }) => {
             const event: ScheduleEvent = {
                 venue,
@@ -19,13 +19,15 @@ const getScheduleByDay = (locale: string): Array<ScheduleDay> => {
                 sport: {
                     title,
                     icon,
+                    about,
+                    schedule,
                 },
             };
 
             const dayKey = dateFormat(event.start, "yyyy-mm-dd");
             daysMap[dayKey] = {
                 date: event.start,
-                events: [...(daysMap[dayKey]?.events || []), event],
+                events: [...(daysMap[dayKey]?.events || []), event].sort((a, b) => +a.start - +b.start),
             };
         });
     });

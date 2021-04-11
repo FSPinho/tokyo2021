@@ -17,14 +17,14 @@ export const TEXT_PRESETS: Record<TextTypography, TextPreset> = {
         letterSpacing: 0.0,
     },
     body1: {
-        fontSize: 14,
-        lineHeight: 16,
+        fontSize: 16,
+        lineHeight: 18,
         weight: "Regular",
         letterSpacing: 1,
     },
     body2: {
-        fontSize: 14,
-        lineHeight: 16,
+        fontSize: 16,
+        lineHeight: 18,
         weight: "Bold",
         letterSpacing: 1,
     },

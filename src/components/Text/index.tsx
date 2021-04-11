@@ -25,10 +25,6 @@ export const Text: React.FC<TextProps> = ({
         preset = TEXT_PRESETS["body1"];
     }
 
-    if (children) {
-        console.error("Text elements shouldn't have child elements.");
-    }
-
     const translatedText = useTranslation(translation, translationData);
 
     /**
@@ -56,7 +52,7 @@ export const Text: React.FC<TextProps> = ({
 
     return (
         <HCText numberOfLines={numberOfLines} style={[style, animatedPresetStyle]} {...presetStyle} {...props}>
-            {translatedText || value || translation}
+            {translatedText || value || translation || children}
             {TrailTextComponent}
         </HCText>
     );

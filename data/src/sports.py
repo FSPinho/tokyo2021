@@ -128,6 +128,62 @@ def get_sports(languages, url, output):
                     }
                 }
             }
+            
+    sports["en-US"]["ceremony-open"] = {
+        "title": "Opening Ceremony",
+        "icon": None,
+        "schedule": [
+            {
+                "venue": "Venue: Olympic Stadium",
+                "start": "2021-07-23T20:00:00+0900",
+                "end": "2021-07-23T23:00:00+0900",
+                "sessions": []
+            },
+        ],
+        "about": None
+    }
+    
+    sports["en-US"]["ceremony-close"] = {
+            "title": "Closing Ceremony",
+            "icon": None,
+            "schedule": [
+                {
+                    "venue": "Venue: Olympic Stadium",
+                    "start": "2021-08-08T20:00:00+0900",
+                    "end": "2021-08-08T23:00:00+0900",
+                    "sessions": []
+                }
+            ],
+            "about": None
+        }
+    
+    sports["es-ES"]["ceremony-open"] = {
+        "title": "Ceremonia de Apertura",
+        "icon": None,
+        "schedule": [
+            {
+                "venue": "Sede: Estadio Olímpico",
+                "start": "2021-07-23T20:00:00+0900",
+                "end": "2021-07-23T23:00:00+0900",
+                "sessions": []
+            },
+        ],
+        "about": None
+    }
+    
+    sports["es-ES"]["ceremony-close"] = {
+            "title": "Ceremonia de Clausura",
+            "icon": None,
+            "schedule": [
+                {
+                    "venue": "Sede: Estadio Olímpico",
+                    "start": "2021-08-08T20:00:00+0900",
+                    "end": "2021-08-08T23:00:00+0900",
+                    "sessions": []
+                }
+            ],
+            "about": None
+        }
 
     with codecs.open(output, "w", encoding="UTF-8") as output_file:
         output_file.write(dumps(sports, indent=4, ensure_ascii=False))

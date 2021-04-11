@@ -18,11 +18,11 @@ export const DefaultTheme: IDefaultTheme = {
         backgroundLightText: "#2F3542",
         backgroundLightTextSecondary: "#57606F",
         backgroundLightTextTertiary: "#8A8D93",
-        backgroundLightRipple: "#1157B944",
+        backgroundLightRipple: "#9C27B044",
         backgroundLightGrey: "#E4E5E8",
         backgroundLightGreySecondary: "#E9EAEE",
         backgroundLightGreyText: "#2F3542",
-        backgroundLightGreyRipple: "#1157B988",
+        backgroundLightGreyRipple: "#9C27B044",
 
         /**
          * Warns

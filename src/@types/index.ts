@@ -1,6 +1,13 @@
 export interface Sport {
     title: string;
     icon: string;
+    about: {
+        texts: Array<string>;
+        image: {
+            alt: string;
+            url: string;
+        };
+    };
     schedule: Array<Omit<ScheduleEvent, "sport">>;
 }
 
@@ -8,10 +15,17 @@ export interface SportRaw {
     title: string;
     icon: string;
     schedule: Array<Omit<ScheduleEventRaw, "sport">>;
+    about: {
+        text: Array<string>;
+        image: {
+            alt: string;
+            utl: string;
+        };
+    };
 }
 
 export interface ScheduleEvent {
-    sport: Omit<Sport, "schedule">;
+    sport: Sport;
     venue: string;
     start: Date;
     end: Date;

@@ -67,19 +67,19 @@ def parse_date(date_str, lang):
     _date_beg = re.sub(r"(\d{1,2}:\d{1,2}).*(\d{1,2}:\d{1,2}).*", r"", _date_str, count=1)
 
     if re.search(r".*(\d{1,2}:\d{1,2}).*(\d{1,2}:\d{1,2}).*", _date_str):
-        _date_sta = _date_beg + " " + re.sub(r".*(\d{1,2}:\d{1,2}).*(\d{1,2}:\d{1,2}).*", r"\1", _date_str, count=1)
-        _date_end = _date_beg + " " + re.sub(r".*(\d{1,2}:\d{1,2}).*(\d{1,2}:\d{1,2}).*", r"\2", _date_str, count=1)
+        _date_sta = _date_beg + " " + re.sub(r".*[^\d](\d{1,2}:\d{1,2})[^\d]*(\d{1,2}:\d{1,2}).*", r"\1", _date_str, count=1)
+        _date_end = _date_beg + " " + re.sub(r".*[^\d](\d{1,2}:\d{1,2})[^\d]*(\d{1,2}:\d{1,2}).*", r"\2", _date_str, count=1)
     else:
         _date_sta = _date_beg + " 00:00"
         _date_end = _date_beg + " 00:00"
 
     # schedule https://tokyo2020.org/es/calendario/atletismo-calendario
-    _date_end = _date_end.replace(r"29:50", r"19:50")
+    _date_sta = _date_sta.replace(r"29:50", r"19:50")
 
     locales = [lang.split("-")[0]]
     date_formats = ["%a %d %b %H:%M", "%A %d %b %H:%M", "%a %d %B %H:%M", "%A %d %B %H:%M"]
 
-    parsed_sta = dateparser.parse(_date_sta, locales=locales, date_formats=date_formats)
-    parsed_end = dateparser.parse(_date_end, locales=locales, date_formats=date_formats)
-
+    parsed_sta = dateparser.parse(_date_sta, locales=locales, date_formats=date_formats, settings={"TIMEZONE": "+0900", "RETURN_AS_TIMEZONE_AWARE": True})
+    parsed_end = dateparser.parse(_date_end, locales=locales, date_formats=date_formats, settings={"TIMEZONE": "+0900", "RETURN_AS_TIMEZONE_AWARE": True})
+    
     return parsed_sta, parsed_end
