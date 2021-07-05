@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1058751700285",
+    "firebase_url": "https://cytech-baixai.firebaseio.com",
+    "project_id": "cytech-baixai",
+    "storage_bucket": "cytech-baixai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058751700285:android:773a329f13cac627657954",
+        "android_client_info": {
+          "package_name": "com.cytech.tokyo2020"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058751700285-gmjd83jk177b6dlseqg646lmgsn1upv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDd_FfqgfK5UlM5YG3elDDyRMYm02PorM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058751700285-gmjd83jk177b6dlseqg646lmgsn1upv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
