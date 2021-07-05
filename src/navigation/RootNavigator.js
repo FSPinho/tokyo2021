@@ -1,17 +1,17 @@
-import React from 'react';
-import { AgendaPage, Box, Text } from '../components';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import DateFormat from 'dateformat';
+import React from "react";
+import { AgendaPage, Box, Text } from "../components";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+import DateFormat from "dateformat";
 
-import { Liked, Ranking, SportDetail, Sports } from '../screens';
-import { Theme } from '../theme';
-import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ActivityIndicator } from 'react-native-paper';
-import { Dimensions } from 'react-native';
-import { SCHEDULE } from '../constants/TokyoScheduleData';
+import { Liked, Ranking, SportDetail, Sports } from "../screens";
+import { Theme } from "../theme";
+import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { ActivityIndicator } from "react-native-paper";
+import { Dimensions } from "react-native";
+import { SCHEDULE } from "../constants/TokyoScheduleData";
 
 const tabs = {};
 SCHEDULE.map((e, i) => {
@@ -25,9 +25,9 @@ SCHEDULE.map((e, i) => {
             />
         ),
         navigationOptions: {
-            tabBarLabel: ({  tintColor }) => (
-                <Text font={'body2'} color={tintColor}>
-                    {DateFormat(e.date, 'dd/mm')}
+            tabBarLabel: ({ tintColor }) => (
+                <Text font={"body2"} color={tintColor}>
+                    {DateFormat(e.date, "dd/mm")}
                 </Text>
             ),
             swipeEnabled: true,
@@ -44,8 +44,8 @@ const TabNavigator = createMaterialTopTabNavigator(tabs, {
         </Box>
     ),
     initialLayout: {
-        width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height,
+        width: Dimensions.get("screen").width,
+        height: Dimensions.get("screen").height,
     },
     tabBarOptions: {
         activeTintColor: Theme.palette.primary,
@@ -67,16 +67,16 @@ const TabNavigator = createMaterialTopTabNavigator(tabs, {
     },
 });
 
-const RootNavigator = createStackNavigator({
+const _RootNavigator = createStackNavigator({
     Home: {
         screen: createMaterialBottomTabNavigator(
             {
                 Home: {
                     screen: TabNavigator,
                     navigationOptions: {
-                        tabBarIcon: ({  tintColor }) => (
+                        tabBarIcon: ({ tintColor }) => (
                             <MIcon
-                                name={'home-outline'}
+                                name={"home-outline"}
                                 color={tintColor}
                                 size={24}
                             />
@@ -87,9 +87,9 @@ const RootNavigator = createStackNavigator({
                 Sports: {
                     screen: Sports,
                     navigationOptions: {
-                        tabBarIcon: ({  tintColor }) => (
+                        tabBarIcon: ({ tintColor }) => (
                             <MIcon
-                                name={'racquetball'}
+                                name={"racquetball"}
                                 color={tintColor}
                                 size={24}
                             />
@@ -100,9 +100,9 @@ const RootNavigator = createStackNavigator({
                 Ranking: {
                     screen: Ranking,
                     navigationOptions: {
-                        tabBarIcon: ({  tintColor }) => (
+                        tabBarIcon: ({ tintColor }) => (
                             <MIcon
-                                name={'trophy-outline'}
+                                name={"trophy-outline"}
                                 color={tintColor}
                                 size={24}
                             />
@@ -115,7 +115,7 @@ const RootNavigator = createStackNavigator({
                     navigationOptions: {
                         tabBarIcon: ({ tintColor }) => (
                             <MIcon
-                                name={'heart-outline'}
+                                name={"heart-outline"}
                                 color={tintColor}
                                 size={24}
                             />
@@ -132,16 +132,16 @@ const RootNavigator = createStackNavigator({
                     backgroundColor: Theme.palette.backgroundPrimary,
                     margin: Theme.metrics.spacing * 4,
                     borderRadius: Theme.metrics.borderRadius * 2,
-                    overflow: 'hidden',
-                    position: 'absolute',
-                    width: 'auto',
+                    overflow: "hidden",
+                    position: "absolute",
+                    width: "auto",
                     elevation: 10,
                 },
-                backBehavior: 'history',
+                backBehavior: "history",
             },
         ),
         navigationOptions: {
-            headerTitle: () => <Text font={'title'}>Tokyo 2020</Text>,
+            headerTitle: () => <Text font={"title"}>Tokyo 2020</Text>,
             headerStyle: {
                 elevation: 0,
             },
@@ -152,14 +152,33 @@ const RootNavigator = createStackNavigator({
         screen: SportDetail,
         navigationOptions: ({ navigation }) => ({
             headerTitle: (
-                <Box fit style={{maxWidth: Dimensions.get("window").width - 128}}>
-                    <Text style={{ fontSize: 18, marginLeft: -16 }} numberOfLines={1} fontWeight={"bold"}>
-                        {navigation.getParam('sport').about.map(a => a.name).join(" / ")}
+                <Box
+                    fit
+                    style={{ maxWidth: Dimensions.get("window").width - 128 }}>
+                    <Text
+                        style={{ fontSize: 18, marginLeft: -16 }}
+                        numberOfLines={1}
+                        fontWeight={"bold"}>
+                        {navigation
+                            .getParam("sport")
+                            .about.map(a => a.name)
+                            .join(" / ")}
                     </Text>
                 </Box>
-            )
+            ),
         }),
     },
 });
 
-export default createAppContainer(RootNavigator);
+const Stack = createStackNavigator();
+
+export const RootNavigator = () => {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen name={"Home"} component={null} />
+                <Stack.Screen name={"SportDetail"} component={SportDetail} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+};

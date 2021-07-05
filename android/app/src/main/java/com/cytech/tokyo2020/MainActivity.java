@@ -1,4 +1,4 @@
-package com.tokyo2020;
+package com.cytech.tokyo2020;
 
 import com.facebook.react.ReactActivity;
 

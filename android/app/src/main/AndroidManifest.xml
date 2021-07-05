@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.tokyo2020">
+  package="com.cytech.tokyo2020">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
