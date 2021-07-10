@@ -5,7 +5,6 @@ import { FlipperProvider } from "./utils/FlipperProviderUtil";
 import { StoreProvider } from "./stores";
 import { LocaleProvider } from "./i18n";
 import Splash from "react-native-splash-screen";
-import {StatusBar} from "react-native";
 
 export const App: React.FC = () => {
     useEffect(() => {
